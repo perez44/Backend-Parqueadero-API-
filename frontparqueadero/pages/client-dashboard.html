@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Parqueadero - Parking Lot</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/client-dashboard.css">
+</head>
+<body>
+    <div class="client-app">
+        <!-- Header -->
+        <header class="client-header">
+            <div class="header-content">
+                <div class="header-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
+                    </svg>
+                    <span>Parking Lot</span>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="notification-btn" title="Notificaciones">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                        <span class="notification-badge" id="notificationBadge">0</span>
+                    </div>
+                    
+                    <div class="profile-dropdown">
+                        <button class="profile-btn" onclick="toggleProfileMenu()">
+                            <div class="profile-avatar" id="profileAvatar">
+                                <span id="avatarInitials">U</span>
+                            </div>
+                        </button>
+                        
+                        <div class="profile-menu" id="profileMenu">
+                            <div class="profile-menu-header">
+                                <div class="profile-avatar-lg" id="menuAvatar">
+                                    <span id="menuAvatarInitials">U</span>
+                                </div>
+                                <div class="profile-info">
+                                    <span class="profile-name" id="profileName">Cargando...</span>
+                                    <span class="profile-email" id="profileEmail">correo@email.com</span>
+                                </div>
+                            </div>
+                            <div class="profile-menu-divider"></div>
+                            <a href="#" class="profile-menu-item" onclick="openProfileModal()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                                Mi Perfil
+                            </a>
+                            <a href="#" class="profile-menu-item" onclick="openVehiclesModal()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/>
+                                    <circle cx="6.5" cy="16.5" r="2.5"/>
+                                    <circle cx="16.5" cy="16.5" r="2.5"/>
+                                </svg>
+                                Mis Vehículos
+                            </a>
+                            <a href="#" class="profile-menu-item" onclick="openHistoryModal()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                Historial
+                            </a>
+                            <div class="profile-menu-divider"></div>
+                            <a href="#" class="profile-menu-item logout" onclick="logout()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                    <polyline points="16 17 21 12 16 7"/>
+                                    <line x1="21" y1="12" x2="9" y2="12"/>
+                                </svg>
+                                Cerrar Sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="client-main">
+            <div id="alertContainer"></div>
+            
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <div class="welcome-content">
+                    <h1>Bienvenido, <span id="welcomeName">Usuario</span></h1>
+                    <p>Visualiza el estado actual del parqueadero en tiempo real</p>
+                </div>
+                <div class="welcome-illustration">
+                    <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Parking lot illustration -->
+                        <rect x="10" y="80" width="180" height="70" rx="8" fill="#1e1e1e" stroke="#3b82f6" stroke-width="2"/>
+                        <rect x="25" y="95" width="35" height="45" rx="4" fill="#22c55e" opacity="0.3" stroke="#22c55e" stroke-width="2"/>
+                        <rect x="70" y="95" width="35" height="45" rx="4" fill="#ef4444" opacity="0.3" stroke="#ef4444" stroke-width="2"/>
+                        <rect x="115" y="95" width="35" height="45" rx="4" fill="#22c55e" opacity="0.3" stroke="#22c55e" stroke-width="2"/>
+                        <rect x="160" y="95" width="25" height="45" rx="4" fill="#22c55e" opacity="0.3" stroke="#22c55e" stroke-width="2"/>
+                        <!-- Car -->
+                        <g transform="translate(75, 100)">
+                            <rect x="2" y="15" width="26" height="12" rx="2" fill="#3b82f6"/>
+                            <rect x="5" y="8" width="20" height="10" rx="2" fill="#3b82f6"/>
+                            <circle cx="8" cy="27" r="4" fill="#252525"/>
+                            <circle cx="22" cy="27" r="4" fill="#252525"/>
+                            <rect x="8" y="10" width="6" height="5" rx="1" fill="#06b6d4" opacity="0.5"/>
+                            <rect x="16" y="10" width="6" height="5" rx="1" fill="#06b6d4" opacity="0.5"/>
+                        </g>
+                        <!-- P sign -->
+                        <circle cx="100" cy="40" r="30" fill="#3b82f6" opacity="0.2"/>
+                        <text x="100" y="48" text-anchor="middle" fill="#3b82f6" font-size="32" font-weight="bold">P</text>
+                    </svg>
+                </div>
+            </section>
+
+            <!-- Stats Cards -->
+            <section class="stats-section">
+                <div class="stat-card-client">
+                    <div class="stat-card-icon available">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <div class="stat-card-content">
+                        <span class="stat-label">Disponibles</span>
+                        <span class="stat-number" id="statAvailable">0</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card-client">
+                    <div class="stat-card-icon occupied">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                    </div>
+                    <div class="stat-card-content">
+                        <span class="stat-label">Ocupadas</span>
+                        <span class="stat-number" id="statOccupied">0</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card-client">
+                    <div class="stat-card-icon car">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/>
+                            <circle cx="6.5" cy="16.5" r="2.5"/>
+                            <circle cx="16.5" cy="16.5" r="2.5"/>
+                        </svg>
+                    </div>
+                    <div class="stat-card-content">
+                        <span class="stat-label">Para Carros</span>
+                        <span class="stat-number" id="statCars">0</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card-client">
+                    <div class="stat-card-icon moto">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="5" cy="17" r="3"/>
+                            <circle cx="19" cy="17" r="3"/>
+                            <path d="M9 17h6l3-8h-3l-2-4H7l-2 4"/>
+                        </svg>
+                    </div>
+                    <div class="stat-card-content">
+                        <span class="stat-label">Para Motos</span>
+                        <span class="stat-number" id="statMotos">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Parking Map Section -->
+            <section class="parking-section">
+                <div class="section-header">
+                    <h2>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="3" y1="9" x2="21" y2="9"/>
+                            <line x1="9" y1="21" x2="9" y2="9"/>
+                        </svg>
+                        Mapa del Parqueadero
+                    </h2>
+                    
+                    <div class="floor-tabs">
+                        <button class="floor-tab active" data-floor="1" onclick="selectFloor(1)">
+                            <span>Piso 1</span>
+                        </button>
+                        <button class="floor-tab" data-floor="2" onclick="selectFloor(2)">
+                            <span>Piso 2</span>
+                        </button>
+                        <button class="floor-tab" data-floor="3" onclick="selectFloor(3)">
+                            <span>Piso 3</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="parking-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot available"></div>
+                        <span>Disponible</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot occupied"></div>
+                        <span>Ocupado</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot my-vehicle"></div>
+                        <span>Mi Vehículo</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot moto"></div>
+                        <span>Moto</span>
+                    </div>
+                </div>
+
+                <!-- SVG Parking Map -->
+                <div class="parking-map-container">
+                    <div class="parking-areas">
+                        <!-- Area A -->
+                        <div class="parking-area">
+                            <div class="area-header">
+                                <h3>Área A - Carros</h3>
+                                <span class="area-count" id="areaACount">0 disponibles</span>
+                            </div>
+                            <div class="parking-grid-modern" id="parkingGridAreaA">
+                                <!-- Cells will be generated here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Divider/Road -->
+                        <div class="parking-road">
+                            <div class="road-line"></div>
+                            <div class="road-markers">
+                                <span class="road-marker entry">ENTRADA</span>
+                                <span class="road-marker exit">SALIDA</span>
+                            </div>
+                            <div class="road-line"></div>
+                        </div>
+                        
+                        <!-- Area B -->
+                        <div class="parking-area">
+                            <div class="area-header">
+                                <h3>Área B - Carros / Motos</h3>
+                                <span class="area-count" id="areaBCount">0 disponibles</span>
+                            </div>
+                            <div class="parking-grid-modern" id="parkingGridAreaB">
+                                <!-- Cells will be generated here -->
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+            <!-- My Vehicles Section -->
+            <section class="my-vehicles-section" id="myVehiclesPreview">
+                <div class="section-header">
+                    <h2>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/>
+                            <circle cx="6.5" cy="16.5" r="2.5"/>
+                            <circle cx="16.5" cy="16.5" r="2.5"/>
+                        </svg>
+                        Mis Vehículos
+                    </h2>
+                </div>
+                <div class="vehicles-grid" id="myVehiclesGrid">
+                    <!-- Vehicles will be dynamically added -->
+                    <div class="vehicle-card-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/>
+                            <circle cx="6.5" cy="16.5" r="2.5"/>
+                            <circle cx="16.5" cy="16.5" r="2.5"/>
+                        </svg>
+                        <span>Cargando vehículos...</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal modal-profile">
+            <div class="modal-header">
+                <h3 class="modal-title">Mi Perfil</h3>
+                <button class="modal-close" onclick="closeProfileModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-edit-avatar">
+                    <div class="profile-avatar-edit" id="editProfileAvatar">
+                        <span id="editAvatarInitials">U</span>
+                    </div>
+                    <button class="btn btn-sm btn-secondary" onclick="changeProfilePhoto()">Cambiar foto</button>
+                </div>
+                
+                <form id="profileForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Tipo de Documento</label>
+                            <select id="editDocType" class="form-control">
+                                <option value="CC">Cédula de Ciudadanía</option>
+                                <option value="CE">Cédula de Extranjería</option>
+                                <option value="TI">Tarjeta de Identidad</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Número de Documento</label>
+                            <input type="text" id="editDocNumber" class="form-control" disabled>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" id="editFullName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Correo Electrónico</label>
+                            <input type="email" id="editEmail" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Teléfono</label>
+                            <input type="tel" id="editPhone" class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeProfileModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveProfile()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vehicles Modal -->
+    <div class="modal-overlay" id="vehiclesModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Mis Vehículos</h3>
+                <button class="modal-close" onclick="closeVehiclesModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="vehicles-list" id="vehiclesList">
+                    <!-- Vehicles will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeVehiclesModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal-overlay" id="historyModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Historial de Parqueo</h3>
+                <button class="modal-close" onclick="closeHistoryModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="history-list" id="historyList">
+                    <!-- History will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeHistoryModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cell Detail Modal -->
+    <div class="modal-overlay" id="cellDetailModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="cellDetailTitle">Celda</h3>
+                <button class="modal-close" onclick="closeCellDetailModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="cellDetailContent">
+                <!-- Cell details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCellDetailModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/client-dashboard.js"></script>
+</body>
+</html>
